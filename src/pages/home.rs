@@ -1,33 +1,32 @@
+use std::clone;
 use leptos::{server_fn::error::NoCustomError, *};
 use leptos_router::*;
+use crate::client_lib;
+use crate::client_lib::*;
+use tonic_web_wasm_client::Client;
+
+
+pub async fn check_server_alive() -> client_lib::OperationSuccessModel {
+    let mut client = client_lib::data_qrunch_service_client::DataQrunchServiceClient::new(Client::new("localhost:8080".to_string()));
+    let request = client_lib::Empty{};
+    let response = client.server_alive(request).await.unwrap();
+
+    response.into_inner()
+}
 
 /// Renders the home page of your application.
 #[component]
 pub fn Home() -> impl IntoView {
-    // Creates a reactive value to update the button
-    let increment_count = create_server_action::<UpdateCount>();
+    let (count, set_count) = create_signal(0);
 
-    let count = create_resource(
-        move || {
-            (
-                increment_count.version().get(),
-                // clear.version().get(),
-            )
-        },
-        |_| get_count(),
-    );
-
+    let double_count = move || count.get() * 2;
     view! {
-        <picture class="img">
-            <source srcset="https://raw.githubusercontent.com/leptos-rs/leptos/main/docs/logos/Leptos_logo_pref_dark_RGB.svg" media="(prefers-color-scheme: dark)" />
-            <img src="https://raw.githubusercontent.com/leptos-rs/leptos/main/docs/logos/Leptos_logo_RGB.svg" alt="Leptos Logo" height="200" width="400" />
-        </picture>
-
-        <h1>"Welcome to Leptos"</h1>
-
-        <ActionForm action=increment_count>
-            <button >"Click Me: " {move || count.get()}</button>
-        </ActionForm>
+        <Await
+        future=|| check_server_alive()
+        let:data
+        >
+        <p>{data.success} "grr"</p>
+        </Await>
     }
 }
 

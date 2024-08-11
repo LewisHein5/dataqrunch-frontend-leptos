@@ -3,6 +3,7 @@ mod routes;
 
 #[cfg(feature = "ssr")]
 mod server;
+mod client_lib;
 
 use cfg_if::cfg_if;
 

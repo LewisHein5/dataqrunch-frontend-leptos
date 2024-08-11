@@ -1,0 +1,151 @@
+syntax="proto3";
+
+package dataqrunch;
+
+service DataQrunchService {
+  rpc GetDatasetInfo(DatasetIdModel) returns (DatasetInfo); //Done
+  rpc GetDatasetRows(DatasetRowsRequest) returns (DatasetRowsList); //Done
+  rpc GetDataset(DatasetIdModel) returns (Dataset); //Done
+  rpc CreateDataset(CreateDatasetRequest) returns (Dataset); //Done
+  rpc ModifyDataset(Dataset) returns (Dataset); //Done
+  rpc ListDatasets(ListDatasetsRequest) returns (DatasetsList); //Done
+  rpc AddRows(DatasetRowUploadRequest) returns (DatasetRow); //Done
+
+  rpc CreateGroup(CreateGroupRequest) returns (Group); //Done
+  rpc AddGroupToGroup(ModifyGroupParentGroupRequest) returns (Group); //Done
+  rpc RemoveGroupFromGroup(ModifyGroupParentGroupRequest) returns (Group); //Done
+  rpc ListGroups(ListGroupsRequest) returns (GroupsList); //Done
+  rpc GetGroup(GroupIdModel) returns (Group); //Done
+
+  rpc AddDatasetToGroup(ModifyDatasetParentGroupRequest) returns (Group); //Done
+  rpc RemoveDatasetFromGroup(ModifyDatasetParentGroupRequest) returns (Group); //Done
+
+  rpc ServerAlive(Empty) returns (OperationSuccessModel); //Done
+  rpc ListDataTypes(Empty) returns (DataTypesList);
+}
+
+message Empty {}
+
+
+message Dataset {
+  DatasetIdModel id = 1;
+  string name = 2;
+  repeated DatasetSpec spec = 3;
+}
+
+message CreateDatasetRequest {
+  optional GroupIdModel parent = 1;
+  string name = 2;
+  DatasetSpec spec = 3;
+}
+
+message DatasetsList {
+  repeated Dataset datasets = 1;
+}
+
+message DataTypesList{
+  repeated string types = 1;
+}
+
+message OperationSuccessModel {
+  bool success = 1;
+}
+
+message DatasetIdModel {
+  string id = 1;
+}
+
+message GroupIdModel {
+  string id = 1;
+}
+
+message DatasetSpec {
+  uint64 version = 1;
+  repeated ColumnSpecModel columns = 2;
+  repeated RowConstraintModel constraints = 3;
+}
+
+message RowConstraintModel{
+  string name = 1;
+  string sql_query = 2;
+}
+
+message ColumnSpecModel {
+  string column_name = 1;
+  DataColumnType data_types = 2;
+}
+
+message DatasetInfo {
+  uint64 n_rows = 3;
+  uint64 size = 4;
+  string modified = 5;
+}
+
+message DatasetRow {
+  OptionalUInt64 dataset_spec_version = 1;
+  string version = 2;
+  repeated string data = 3;
+  OptionalUInt64 row_num = 4;
+}
+
+message OptionalUInt64 { //We need this to prevent the assignment of 0 as a default value when the row_num is not given. Otherwise the client has to calculate the row number every time a row is inserted
+  uint64 row_num = 1;
+}
+
+message DatasetRowsList {
+  repeated DatasetRow rows = 1;
+}
+
+message DatasetRowsRequest {
+  DatasetIdModel id = 1;
+  uint64 rowStart = 2;
+  uint64 nRows = 3;
+}
+
+message DatasetRowUploadRequest {
+  DatasetIdModel id = 1;
+  DatasetRow row = 2;
+}
+
+message Group{
+  string name = 1;
+  GroupIdModel id = 2;
+  repeated Group subgroups = 3;
+  repeated Dataset datasets = 4;
+}
+
+message GroupsList{
+  repeated Group groups = 1;
+}
+
+message CreateGroupRequest {
+  string name = 1;
+  optional GroupIdModel parent_group = 2;
+}
+
+message ModifyDatasetParentGroupRequest {
+  DatasetIdModel dataset = 1;
+  GroupIdModel group = 2;
+}
+
+message ModifyGroupParentGroupRequest {
+  GroupIdModel group = 1;
+  GroupIdModel new_parent = 2;
+}
+
+message ListDatasetsRequest {
+  optional GroupIdModel group = 1;
+}
+
+message ListGroupsRequest {
+  optional GroupIdModel group = 1;
+}
+
+enum DataColumnType {
+  STRING = 0;
+  FLOAT64 = 1;
+  DATE=2;
+  TIMESTAMP=3;
+  SINT=4;
+  UINT=5;
+}

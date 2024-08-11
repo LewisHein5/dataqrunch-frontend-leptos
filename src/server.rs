@@ -7,10 +7,6 @@ async fn handle_dataqrunch_frontend(req: IncomingRequest, resp_out: ResponseOutp
     let mut conf = leptos::get_configuration(None).await.unwrap();
     conf.leptos_options.output_name = "dataqrunch_frontend".to_owned();
 
-    // Register server functions
-    register_explicit::<crate::pages::home::GetCount>();
-    register_explicit::<crate::pages::home::UpdateCount>();
-
     let app_router = crate::routes::AppRouter;
 
     let mut routes = RouteTable::build(app_router);

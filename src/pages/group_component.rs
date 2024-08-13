@@ -8,7 +8,7 @@ use leptos::SignalGet;
 pub fn GroupComponent(group: Group) -> impl IntoView{
     let (expanded_signal, set_expanded_signal) = create_signal(false);
     view! {
-        <li on:click=move |x| {set_expanded_signal.set(true);}>{group.name}</li>
+        <li on:click=move |x| {set_expanded_signal.set(!expanded_signal.get());}>{group.name}</li>
         <GroupsListComponent groups=group.subgroups expanded=expanded_signal/>
 
         <ul>

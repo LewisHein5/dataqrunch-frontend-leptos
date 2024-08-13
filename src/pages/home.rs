@@ -27,9 +27,16 @@ pub fn Home() -> impl IntoView {
             Err(_) => {vec![]}
         }
     });
+
+    let (expanded_signal, set_expanded_signal) = create_signal(false);
     view! {
         <Suspense fallback = move || view! {<b>"Loading datasets..."</b>}>
-        <GroupsListComponent groups=groups_resource.get().unwrap_or(vec![]) />
+        <div on:click=move |_| {set_expanded_signal.set(true)}>Groups</div>
+        <GroupsListComponent
+        groups=groups_resource.get().unwrap_or(vec![])
+        expanded=expanded_signal
+        on:click=move |_| {set_expanded_signal.set(true)}
+        />
         </Suspense>
     }
 }

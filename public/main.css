@@ -54,6 +54,7 @@ ul.groups-list {
 
 ul.groups-list li {
   padding-left: var(--gutter);
+  text-align: left;
 }
 
 ul.groups-list li.group-collapsed::marker{

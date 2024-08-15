@@ -7,7 +7,7 @@ use leptos::{component, view, CollectView, IntoView, ReadSignal};
 pub fn GroupsListComponent(groups:Vec<Group>, expanded: ReadSignal<bool>) -> impl IntoView {
     let n_groups = groups.len();
     view! {
-        <ul>
+        <ul class="groups-list">
         <Show when=move || {expanded.get()}
         fallback=move || view!{ }
         >

@@ -69,3 +69,10 @@ ul.groups-list li.group-expanded::marker{
   position: relative;
   font-size: var(--icon-size)
 }
+
+ul.groups-list li.dataset::marker {
+  content: "\F35A";
+  font-family: bootstrap-icons;
+  position: relative;
+  font-size: var(--icon-size);
+}

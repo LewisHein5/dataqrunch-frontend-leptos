@@ -1,4 +1,5 @@
-use leptos::*;
+use leptos::{component, IntoView};
+use leptos::prelude::*;
 
 /// 404 - Not Found
 #[component]

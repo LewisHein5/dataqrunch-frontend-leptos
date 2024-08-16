@@ -1,11 +1,11 @@
 use crate::client_lib::Group;
 use crate::pages::groups_list_component::GroupsListComponent;
 use leptos::{component, view, IntoView};
-use leptos::*;
+use leptos::prelude::*;
 
 #[component]
-pub fn GroupComponent(group: Group) -> impl IntoView{
-    let (expanded_signal, set_expanded_signal) = create_signal(false);
+pub fn GroupComponent(group: Group) -> impl IntoView {
+    let (expanded_signal, set_expanded_signal) = signal(false);
     view! {
         <li
         on:click=move |x| {set_expanded_signal.set(!expanded_signal.get());}

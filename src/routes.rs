@@ -1,6 +1,6 @@
-use leptos::*;
+use leptos::prelude::*;
 use leptos_meta::*;
-use leptos_router::*;
+use leptos_router::components::*;
 
 use crate::pages::home::Home;
 use crate::pages::notfound::NotFound;

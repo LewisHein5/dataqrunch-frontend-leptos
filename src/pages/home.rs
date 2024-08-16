@@ -4,8 +4,7 @@ use leptos::*;
 use serde::{Deserialize, Serialize};
 use tonic::Status;
 use tonic_web_wasm_client::Client;
-use leptos::*;
-
+use leptos::prelude::*;
 use thaw::*;//{InlineDrawer, DrawerBody, DrawerHeader, ButtonAppearance, DrawerHeaderTitleAction, DrawerHeaderTitle, Button};
 
 
@@ -23,7 +22,7 @@ impl From<Status> for GablorpError{
 /// Renders the home page of your application.
 #[component]
 pub fn Home() -> impl IntoView {
-    let groups_resource = create_local_resource(|| (), |_| async move {
+    let groups_resource = local_resource(|| (), |_| async move {
         let mut client = data_qrunch_service_client::DataQrunchServiceClient::new(Client::new("http://localhost:10000".to_string()));
         let request = ListGroupsRequest { group: None };
         match client.list_groups(request).await{

@@ -1,7 +1,7 @@
 use crate::client_lib::Group;
 use crate::pages::group_component::GroupComponent;
 use leptos::{component, view, IntoView};
-use leptos::*;
+use leptos::prelude::*;
 
 #[component]
 pub fn GroupsListComponent(groups:Vec<Group>, expanded: ReadSignal<bool>) -> impl IntoView {
